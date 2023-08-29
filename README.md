@@ -60,15 +60,8 @@ python -m pip install -e detectron2
 
 
 # Datasets pipelining
-There are about 3500 annotated text samples. Below are a couple of samples: <br/>
-
-<br/>
-However, according to our chosen model, we have to discipline teh original text. To some extent, we were performed a thorough  investigate among the datasets for checking the irregular annotated samples
-<br/>
-Eventually, we analyzed and measured the annotated labels quality and necessities. The original datasets have nearly 20 different 
-labels and among them some are unnecssesary and we figured out that these are irrelevant to our job. Thus, we eradicated them from the sample annotations. We chose 7 different labels for our model.
-<br/>
-For the final datasets, we filtered around 3467 ideal samples. Below are a few examples of our 10 ideal samples:  
+There are about 500 annotated image samples training and 100 samples for evaluating the performance. Below are a couple of samples: <br/>
+ 
 <br/> <br/>
 <p align="center">
   <img src="" title="Ideal Samples">
@@ -113,9 +106,16 @@ python3 train.py -e "config/faster_rcnn_R_50_C4_3x_Ep1.yaml" --device cuda
 
 #### Inference  <br/> 
 
+Put the `model_final.pth` file in the `log/R101-FPN_3x_MAXiter50000/` folder
+For maskrcnn and cpu
 ```
-python predict.py --modle_name BanglaBert --gpu_ids -1
+python3 visualizer_withPredict.py -e "config/R101_FPN_ep3.yaml" --device cpu
 ```
+For faster-rcnn and cpu
+```
+python3 visualizer_withPredict.py -e "config/faster_rcnn_R_50_C4_3x_Ep1.yaml" --device cpu
+```
+
 #### Inference  <br/>
 <p align="center">
   <img src="" title="Ideal Samples">
@@ -129,7 +129,7 @@ python predict.py --modle_name BanglaBert --gpu_ids -1
     - [ ] tools: docker, docker-compose <br/>
 
 # Acknowledgement
-Specail thanks goes to Hisab coding test system for assinging and sharing a well organized resource and clear instructions. <br/> <br/>
-[paper](https://arxiv.org/abs/2205.00034)  <br/>
-[Bengali_Ner](https://github.com/Rifat1493/Bengali-NER)  <br/>
-[towardsdatascience blo](https://towardsdatascience.com/named-entity-recognition-with-bert-in-pytorch-a454405e0b6a)
+Specail thanks goes to Braincraft recruitment team for assigning and sharing a well-organized and clear instructions. <br/> <br/>
+[paper](https://arxiv.org/abs/1703.06870)  <br/>
+[paper](https://arxiv.org/abs/1703.06870)  <br/>
+[Bengali_Ner](https://arxiv.org/abs/1506.01497)  <br/>
