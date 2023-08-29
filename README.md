@@ -1,49 +1,66 @@
 # Welcome to braincraft_img_classifier
-This repo is for detecting names corresponding to the given sentence. Suppose an example sentence 
-<br/> `আব্দুর রহিম নামের কাস্টমারকে একশ টাকা বাকি দিলাম।` <br/> The ner model should generate `আব্দুর রহিম` <br/>
-
+This repo is for classifying the image between three classes such as person, group of person and focus object class. 
 # Installing
 
-This project is primarily developed in windows 10 environment. <br/>
-### For Windows: <br />
+This project is primarily developed in Linux. <br/>
+### For Linux: <br />
 Create a virtual environment by below cmd <br />
 ```
-pip install virtualenv
-virtualvenv hisab_ner
+python -m venv braincraft
 ```
 For activation <br />
 ```
-hisab_ner\Scripts\activate
-``` 
-And then install relevant packages by below cmd <br />
+source braincraft/bin/activate
+```
+First install the python 3.10 version by below cmd.
+
+```
+sudo apt update
+sudo apt-get install python3.10
+```
+And then install relevant dependencies by below cmd <br />
 
 ```
 pip install -r requirement.txt
 ```
+Finally, put the detectron2 git repo in the braincraft_img_classifier folder by below cmd.
 
-
-### For Linux: <br />
+```
+git clone https://github.com/facebookresearch/detectron2.git
+```
+Then install the detectron2 by below cmd.
+```
+python -m pip install -e detectron2
+```
+### For Windows: <br />
 Create a virtual environment by below cmd <br />
 ```
-python -m venv hisab_ner
+pip install virtualenv
+virtualenv braincraft
 ```
 For activation <br />
 ```
-source hisab_ner/bin/activate
+braincraft\Scripts\activate
 ``` 
 And then install relevant dependencies by below cmd <br />
 
 ```
 pip install -r requirement.txt
 ```
+Finally, put the detectron2 git repo in the braincraft_img_classifier folder by below cmd.
+
+```
+git clone https://github.com/facebookresearch/detectron2.git
+```
+Then install the detectron2 by below cmd.
+```
+python -m pip install -e detectron2
+```
 
 
 # Datasets pipelining
 There are about 3500 annotated text samples. Below are a couple of samples: <br/>
-```
-["অগ্রণী ব্যাংকের জ্যেষ্ঠ কর্মকর্তা পদে নিয়োগ পরীক্ষার প্রশ্নপত্র ফাঁসের অভিযোগ উঠেছে।", ["B-ORG", "L-ORG", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O"]]
-["ব্যাংকের চেয়ারম্যানও এ অভিযোগের সত্যতা স্বীকার করেছেন।", ["O", "O", "O", "O", "O", "O", "O", "O"]]
-```
+
 <br/>
 However, according to our chosen model, we have to discipline teh original text. To some extent, we were performed a thorough  investigate among the datasets for checking the irregular annotated samples
 <br/>
@@ -59,67 +76,35 @@ For the final datasets, we filtered around 3467 ideal samples. Below are a few e
 
 # Project Structure
     
-    Hisab_ner
-        |___imgs
-        |___output
-        |___data_preprocess
-        |         |___text_process.py
-        |         |___Hisab_Ner.txt
-        |___src
-            |___datasets
-            |      |____hisab_ner.csv
-            |      |____pred_text.txt
-            |___evaluate.py
-            |___model.py
-            |___predict.py
-            |___requirement.txt
-            |___train.py
-            |___utils.py
-        README.md
-
+    braincraft_img_classifier
+        |___config
+        |___datasets
+        |___detectron2
+        |___log
+        |___prediction
+        |___evaluate.py
+        |___train.py
+        |___utils.py
+        |___visualizer_withPredict.py
+        |___requirements.txt
+        |___README.md
 
 
 # Implementation
-### Our approach:
-#### Initial Thought
-Since our job was to identify the persons name from the given text, so it can be easily done by text classification task. Whereas, in our datasets, each sample has different labels. Perhaps, 20 different labels at most, we decided to design a model for token-label classification task.  <br/>
-#### Model Design
-There are neumerous number of methodologies available out there to solve such sort of problems like as `basic probabilistic approach, rnn, lstm, transformer etc`. Amongst them transformer is the sota model such kind of token-label detection jobs. So, we decided to implement a `transfer learning` method for viable solutions. We have a couple of options for choosing pretrain transformer such as `bert-base-cased` and `sagorsarker/mbert-bengali-ner` from hagging face. We implemented both model and `sagorsarker/mbert-bengali` bert model generated remarkable performance as we showed in loss graph. Later model perform well due to trained by large amount of Bengali text corpus for the specific job by `sagorsarkar`. The pretrained model deployed in hagging face hub. <br/>
-Below are the model codesnipat backed by `sagorsarker/mbert-bengali-ner` hagging face pretrain model. <br/>
-```python
-class HisabNerBertModel(torch.nn.Module):
-    """This class build a model model using hagging face
-    pretrain model called 'sagorsarker/mbert-bengali-ner' which was
-    deployed by sagorsarkar. trained the bert model using 
-    Bengali text with 7 different labels.
-    """
-
-    def __init__(self, opt):
-
-        super(HisabNerBertModel, self).__init__()
-        self.opt = opt
-        self.NerBanglaBert = AutoModelForTokenClassification.from_pretrained(
-            "sagorsarker/mbert-bengali-ner", num_labels=self.opt.num_labels)
-
-    def forward(self, input_id, mask, label):
-        output = self.NerBanglaBert(
-            input_ids=input_id, attention_mask=mask, labels=label,
-            return_dict=False)
-
-        return output
-```
-
-#### Optimization
-Since our job was to detect the name from text, we noticed that the train datasets has lots of labels. As a result, the performance was not up to the mark. The inference result was severely inconsistent. After analyzing the text, we realized that most of the labels are not required for our task. Hence, we decided to shrink the labels to minimize the number of unique labels which was 7 at the end. The final annotated labels are `['B-PERSON', 'GPE', 'I-PERSON', 'LAW', 'O', 'ORG', 'U-PERSON']`. At the beginning, the number of unique labels are around 20. We minimized the label in such a way that `['B-GPE', 'I-GPE', 'L-GPE']` to `'GPE'` likewise `['B-ORG', 'I-ORG', L-ORG']` to `'ORG'` etc. Finally, we trained the model with 3467 samples with 7 different labels and the model was 92% accurate.
-
-
 
 
 #### Train <br />
-For gpu, add `--gpu_ids 1,2, or 3` etc. For cpu, `-1` <br/>
+For Maskrcnn pretrain model
+For gpu, use --device `cuda` else `cpu` <br/>
 ```
-python train.py --dataroot datasets/ner.csv --model_name BanglaBert --gpu_ids -1
+python3 train.py -e "config/R101_FPN_ep3.yaml" --device cuda 
 ```
+For faster-rcnn pretrain model
+For gpu, use --device `cuda` else `cpu` <br/>
+```
+python3 train.py -e "config/faster_rcnn_R_50_C4_3x_Ep1.yaml" --device cuda 
+```
+
 #### Accuracy and Loss graph 
 <p align="center">
   <img src="https://github.com/h-muhammed/hisab_ner/blob/feature/develop/imgs/loss.png" title="Ideal Samples">
@@ -146,9 +131,4 @@ python predict.py --modle_name BanglaBert --gpu_ids -1
 Specail thanks goes to Hisab coding test system for assinging and sharing a well organized resource and clear instructions. <br/> <br/>
 [paper](https://arxiv.org/abs/2205.00034)  <br/>
 [Bengali_Ner](https://github.com/Rifat1493/Bengali-NER)  <br/>
-[Hisab datasets 1](https://github.com/Rifat1493/Bengali-NER/tree/master/annotated%20data)  <br/>
-[Hisab datasets 2](https://raw.githubusercontent.com/banglakit/bengali-ner-data/master/main.jsonl)  <br/>
-[Hagging face](https://huggingface.co/sagorsarker/mbert-bengali-ner)  <br/>
-[medium blogs](https://medium.com/mysuperai/what-is-named-entity-recognition-ner-and-how-can-i-use-it-2b68cf6f545d)  <br/>
-[misc](http://nlpprogress.com/english/named_entity_recognition.html) <br/>
 [towardsdatascience blo](https://towardsdatascience.com/named-entity-recognition-with-bert-in-pytorch-a454405e0b6a)
