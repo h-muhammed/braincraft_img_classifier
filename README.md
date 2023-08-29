@@ -130,6 +130,6 @@ python3 visualizer_withPredict.py -e "config/faster_rcnn_R_50_C4_3x_Ep1.yaml" --
 
 # Acknowledgement
 Specail thanks goes to Braincraft recruitment team for assigning and sharing a well-organized and clear instructions. <br/> <br/>
-[paper](https://arxiv.org/abs/1703.06870)  <br/>
-[paper](https://arxiv.org/abs/1703.06870)  <br/>
-[Bengali_Ner](https://arxiv.org/abs/1506.01497)  <br/>
+[maskrcnn](https://arxiv.org/abs/1703.06870)  <br/>
+[fasterrcnn](https://arxiv.org/abs/1703.06870)  <br/>
+
