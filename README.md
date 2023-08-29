@@ -1,4 +1,7 @@
 # Welcome to braincraft_img_classifier
+
+### Please put special attention here. This section is important. Thank you.
+
 This repo is for classifying the image between three classes such as `person`, `group of person` and `focus object` class. 
 The implementation can train and infer in [google colab](https://colab.research.google.com/drive/1NEyBex-Z9O69m4XagqaezY-XRLhnVUz4?usp=sharing) notebook. Please refer to the
 `dataset` and `pretrained checkpoints model` in the `resource` folder shared by [google drive](https://drive.google.com/drive/folders/1qio8cHJHKPQzRERiwEZMDXs2gnTprQp3?usp=sharing).
