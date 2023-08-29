@@ -1,6 +1,6 @@
 # Welcome to braincraft_img_classifier
 This repo is for classifying the image between three classes such as person, group of person and focus object class. 
-# Installing
+# Environment creation
 
 This project is primarily developed in Linux. <br/>
 ### For Linux: <br />
@@ -23,7 +23,8 @@ And then install relevant dependencies by below cmd <br />
 ```
 pip install -r requirement.txt
 ```
-Finally, put the detectron2 git repo in the braincraft_img_classifier folder by below cmd.
+Finally, since we utilized the detecrton2 library from Meta ai research for implementing maskrcnn and faster-rcnn 
+then we need to put the detectron2 git repo in the braincraft_img_classifier folder by below cmd.
 
 ```
 git clone https://github.com/facebookresearch/detectron2.git
@@ -70,7 +71,7 @@ labels and among them some are unnecssesary and we figured out that these are ir
 For the final datasets, we filtered around 3467 ideal samples. Below are a few examples of our 10 ideal samples:  
 <br/> <br/>
 <p align="center">
-  <img src="https://github.com/h-muhammed/hisab_ner/blob/feature/develop/imgs/datasets.PNG" title="Ideal Samples">
+  <img src="" title="Ideal Samples">
  </p>
 
 
@@ -107,17 +108,17 @@ python3 train.py -e "config/faster_rcnn_R_50_C4_3x_Ep1.yaml" --device cuda
 
 #### Accuracy and Loss graph 
 <p align="center">
-  <img src="https://github.com/h-muhammed/hisab_ner/blob/feature/develop/imgs/loss.png" title="Ideal Samples">
+  <img src="" title="Ideal Samples">
  </p>
 
 #### Inference  <br/> 
-Put inference text in `src/datasets/pred_text.txt`  <br/> Download the checkpoints model from the [shared link](https://drive.google.com/drive/folders/102B6IUpwJ-hj659a5elTQUeboSOpzrLe?usp=sharing)  and put it in the `/output/checkpoints/` folder  <br/>
+
 ```
 python predict.py --modle_name BanglaBert --gpu_ids -1
 ```
 #### Inference  <br/>
 <p align="center">
-  <img src="https://github.com/h-muhammed/hisab_ner/blob/feature/develop/imgs/infer.PNG" title="Ideal Samples">
+  <img src="" title="Ideal Samples">
  </p>
 
 # Whats Next i.e: To-Do  <br/>
