@@ -1,24 +1,26 @@
-import torch
-import os
-import warnings
-warnings.filterwarnings("ignore")
-
 # Some basic setup:
-from utils import default_argument_parser
-from detectron2.utils.logger import setup_logger
-setup_logger()
-
-from detectron2.data import DatasetCatalog
-from detectron2.data.datasets import register_coco_instances
-from detectron2.data import MetadataCatalog
 
 from config.default import get_cfg_defaults
 from detectron2.config import get_cfg
+from detectron2.data import DatasetCatalog
+from detectron2.data.datasets import register_coco_instances
+from detectron2.utils.logger import setup_logger
+
+from detectron2.data import MetadataCatalog
 from detectron2.engine import DefaultTrainer
+
+from utils import default_argument_parser
+
+import os
+import warnings
+warnings.filterwarnings("ignore")
+setup_logger()
+
 
 # used to traning
 register_coco_instances("my_dataset_train", {
-}, "dataset/coco/annotations/train_annotations.json", "dataset/coco/train2017")
+}, "../dataset/coco/annotations/train_annotations.json",
+ "../dataset/coco/train2017")
 dataset_metadata = MetadataCatalog.get("my_dataset_train")
 # get the actual internal representation of the catalog stores
 # information about the datasets and how to obtain them.

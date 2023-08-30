@@ -10,8 +10,8 @@
 
 TRAIN:
   MAX_ITER: 20000
-  LOG_OUTPUT_PATH: "log/R101-FPN_3x_MAXiter50000"
-  CONFIG_FILE_PATH: "detectron2/configs/COCO-Detection/faster_rcnn_R_50_C4_3x.yaml"
+  LOG_OUTPUT_PATH: "../log/R101-FPN_3x_MAXiter50000"
+  CONFIG_FILE_PATH: "../detectron2/configs/COCO-Detection/faster_rcnn_R_50_C4_3x.yaml"
   MODEL_WEIGHTS_PATH: "detectron2://ImageNetPretrained/MSRA/R-50.pkl"
 TEST:
-  MODEL_WEIGHTS_PATH_TEST: "log/R101-FPN_3x_MAXiter50000/model_final.pth"
+  MODEL_WEIGHTS_PATH_TEST: "../log/R101-FPN_3x_MAXiter50000/model_final.pth"

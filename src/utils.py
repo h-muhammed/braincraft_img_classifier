@@ -19,11 +19,13 @@ def binary_mask_to_rle(binary_mask):
 def default_argument_parser():
     parser = ArgumentParser()
     parser.add_argument("-e", "--experiment-file",
-                        help="Your training/testing configuration for the certain experiment")
+                        help="Your training/testing \
+                            configuration for the certain experiment")
     parser.add_argument("--resume", default="False",
                         help="If resume train process")
     parser.add_argument("-img", "--pred_img-file",
-                        help="Your testing configuration for the certain experiment")
+                        help="Your testing configuration \
+                            for the certain experiment")
     parser.add_argument("--device", default="gpu",
                         help="choose between cpu and gpu machine type.")
     return parser

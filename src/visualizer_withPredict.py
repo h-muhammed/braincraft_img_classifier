@@ -1,13 +1,15 @@
-from detectron2.utils.logger import setup_logger
+from config.default import get_cfg_defaults
 from detectron2.config import get_cfg
 from detectron2.data import DatasetCatalog
+from detectron2.data.datasets import register_coco_instances
+from detectron2.utils.logger import setup_logger
+
 from detectron2.data import MetadataCatalog
 from detectron2.engine import DefaultPredictor
-from detectron2.data.datasets import register_coco_instances
 from detectron2.utils.visualizer import ColorMode
-from config.default import get_cfg_defaults
-from utils import default_argument_parser
 from detectron2.utils.visualizer import Visualizer
+from utils import default_argument_parser
+
 
 import cv2
 import os
@@ -22,7 +24,8 @@ setup_logger()
 torch.cuda.empty_cache()
 
 register_coco_instances("my_dataset_test", {
-}, "dataset/coco/annotations/val_annotations.json", "dataset/coco/val2017")
+}, "../dataset/coco/annotations/val_annotations.json",
+ "../dataset/coco/val2017")
 dataset_metadata = MetadataCatalog.get("my_dataset_test")
 # get the actual internal representation of the catalog
 # stores information about the datasets and how to obtain them.
@@ -74,12 +77,12 @@ def single_pred():
 
     im = cv2.imread(args.pred_img_file)
     outputs = predictor(im)
-    # print(outputs['instances'])
+    print(type(outputs))
     classes = outputs['instances'].pred_classes
     classes = classes.tolist()
     person = classes.count(0)
     objects = classes.count(1)
-    print('\n\\\***____________________________________***///\n\n')
+    print('\n***____________________________________***///\n\n')
     if objects:
         print('      The image is belong to focused object class!\n')
     elif person > 2:

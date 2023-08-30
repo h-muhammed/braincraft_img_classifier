@@ -1,32 +1,29 @@
-from pycocotools.coco import COCO
+# model config for this training/test
+from config.default import get_cfg_defaults
+from detectron2.config import get_cfg
+from detectron2.data import DatasetCatalog
+from detectron2.data.datasets import register_coco_instances
+from detectron2.data import MetadataCatalog
+from detectron2.engine import DefaultPredictor
+from detectron2.utils.logger import setup_logger
+
 from detectron2.utils.visualizer import ColorMode
 from detectron2.utils.visualizer import Visualizer
+# used to encode segmentation mask and parser argument in cli
+from utils import binary_mask_to_rle
+from utils import default_argument_parser
+
 import cv2
 import json
 import os
 from tqdm import tqdm
-# used to encode segmentation mask and parser argument in cli
-from utils import binary_mask_to_rle
-from utils import default_argument_parser
-# model config for this training/test
-from config.default import get_cfg_defaults
-# Some basic setup:
-# import some common detectron2 utilities
-from detectron2.config import get_cfg
-from detectron2.data import DatasetCatalog
-# can be replaced by the following three lines:
-from detectron2.data.datasets import register_coco_instances
-from detectron2.data import MetadataCatalog
-# if your dataset is in COCO format, this cell
-# used to testing
-from detectron2.engine import DefaultPredictor
-# Setup detectron2 logger
-from detectron2.utils.logger import setup_logger
+import warnings
+warnings.filterwarnings("ignore")
 setup_logger()
 
-# pycocotools used to form the format of submission json file
 register_coco_instances("my_dataset_test", {
-}, "dataset/coco/annotations/val_annotations.json", "dataset/coco/val2017")
+}, "../dataset/coco/annotations/val_annotations.json",
+    "../dataset/coco/val2017")
 dataset_metadata = MetadataCatalog.get("my_dataset_test")
 # get the actual internal representation of the catalog stores
 # information about the datasets and how to obtain them. The internal
@@ -76,7 +73,7 @@ def evaluate(folder_name):
     pre_name = ''
     coco_dt = []  # Used to save list of dictionaries
     # iterate each image in testing dataset and form the submmision file
-    print('\n\\\***____________________________________***///\n\n')
+    print('\n***____________________________________***///\n\n')
     for d in tqdm(dataset_dicts, ncols=100, mininterval=1, desc="Img Infer"):
         img_id = d["image_id"]
         im = cv2.imread(d["file_name"])
@@ -123,8 +120,8 @@ def evaluate(folder_name):
 
         # Creates the folder, and checks if it is created or not.
         os.makedirs(path, exist_ok=True)
-        cv2.imwrite(os.path.join(path, pre_name + save_filename), out.get_image()
-                    [:, :, ::-1])  # save result file
+        cv2.imwrite(os.path.join(path, pre_name + save_filename),
+                    out.get_image()[:, :, ::-1])  # save result file
 
         for i in range(n_instances):  # Loop all instances
             # save information of the instance in a
@@ -143,5 +140,5 @@ def evaluate(folder_name):
 
 if __name__ == '__main__':
 
-    folder_name = 'prediction'
+    folder_name = '../prediction'
     evaluate(folder_name)
