@@ -66,7 +66,7 @@ python -m pip install -e detectron2
 
 
 # Datasets pipelining
-There are about 500 annotated image samples training and 100 samples for evaluating the performance. Below are a couple of samples: <br/>
+There are about 500 annotated image samples for training and 100 samples for evaluating the performance. Below are a couple of samples: <br/>
  
 <br/> <br/>
 <p align="center">
@@ -77,15 +77,16 @@ There are about 500 annotated image samples training and 100 samples for evaluat
 # Project Structure
     
     braincraft_img_classifier
-        |___config
         |___datasets
         |___detectron2
         |___log
         |___prediction
-        |___evaluate.py
-        |___train.py
-        |___utils.py
-        |___visualizer_withPredict.py
+        |___src
+             |___config
+             |___evaluate.py
+             |___train.py
+             |___utils.py
+             |___visualizer_withPredict.py
         |___requirements.txt
         |___README.md
 
